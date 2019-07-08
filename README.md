@@ -44,6 +44,17 @@ void ComponentRankSequence(const G& g , size_t maxToDisplay, std::ostream& os)
 {
 fsu::Partition p (g.VrtxSize());
 // your process to model the components of g with p goes here
+  fsu::Vector<size_t> component;
+  unsigned components = 0;
+  for (size_t i = 0; i < g.VrtxSize; i++)
+  {
+    if (color[i] == white)
+    {
+      components +=1;
+      Search(i);
+    } 
+  component[i] = components;
+  }
 RankComponentsBySize(p,maxToDisplay,os); // <-- calls your algorithm here
 }
 
