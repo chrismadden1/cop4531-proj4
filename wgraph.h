@@ -9,14 +9,14 @@
 namespace fsu {
     
     template < typename N >
-    class ALUWGraph
+    class ALUWGraph : public ALUGraph <N>
     {
     public:
         
-        typedef N                                   Vertex;
+        typedef N                                   	 Vertex;
 		//****need to map an edge to a real number value.
 		typedef typename fsu::HashTable<Edge, double>    SetType;
-        typedef typename SetType::ConstIterator     AdjIterator;
+        typedef typename SetType::ConstIterator    		 AdjIterator;
         
         void     SetVrtxSize (N n);
         size_t   VrtxSize    () const;
@@ -26,8 +26,8 @@ namespace fsu {
 		void     SetWeight   (Vertex from, Vertex to, double weight);    // (re)sets weight
 		double   GetWeight   (Vertex from, Vertex to) const;             // returns weight if edge exists, 0.0 otherwise
         size_t   EdgeSize    () const;
-        size_t   OutDegree   (Vertex v) const;   //same as unweighted graph
-        size_t   InDegree    (Vertex v) const;   //same as unweighted graph   
+        size_t   OutDegree   (Vertex v) const;  
+        size_t   InDegree    (Vertex v) const;    
         
         AdjIterator Begin   (Vertex x) const;
         AdjIterator End     (Vertex x) const;
@@ -45,7 +45,7 @@ namespace fsu {
     
     //Directed graph - derived from undirected graph
     template < typename N >
-    class ALDWGraph : public ALUWGraph <N>
+    class ALDWGraph : public ALDGraph <N>
     {
     public:
         typedef N                                    Vertex;
@@ -104,7 +104,7 @@ namespace fsu {
        al_= {(from, to) -> wt};
     }
 	
-	template < typename N >
+	/*template < typename N >
     void ALUWGraph<N>::OutDegree(Vertex v)
     {
       return al_[v].Size(); //return size of list corresponding to vertex
@@ -114,7 +114,7 @@ namespace fsu {
     void ALUWGraph<N>::InDegree(Vertex v)
     {
       return al_[v].Size(); //return size of list corresponding to vertex
-    }
+    }*/
 	
 	    template < typename N >
     typename ALUWGraph<N>::AdjIterator ALUWGraph<N>::Begin (Vertex x) const
