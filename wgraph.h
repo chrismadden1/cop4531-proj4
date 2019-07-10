@@ -14,15 +14,17 @@ namespace fsu {
     public:
         
         typedef N                                   	 Vertex;
+		typedef typename fsu::List<Vertex>               SetType2;
 		//****need to map an edge to a real number value.
-		typedef typename fsu::HashTable<Edge, double>    SetType;
+		//add two edges together like key = ToHex(x)+"."+ToHex(y). 
+		typedef typename fsu::HashTable<fsu::String, double>    SetType;
         typedef typename SetType::ConstIterator    		 AdjIterator;
         
         void     SetVrtxSize (N n);
         size_t   VrtxSize    () const;
         void     AddEdge     (Vertex from, Vertex to, double weight = 1.0);
 		bool     HasEdge     (Vertex from, Vertex to, double& wt) const; // sets wt variable if edge exists
-		Edge<N>  GetEdge     (Vertex from, Vertex to) const;             // returns [0,0,0.0] if edge does not exist
+		//Edge<N>  GetEdge     (Vertex from, Vertex to) const;             // returns [0,0,0.0] if edge does not exist
 		void     SetWeight   (Vertex from, Vertex to, double weight);    // (re)sets weight
 		double   GetWeight   (Vertex from, Vertex to) const;             // returns weight if edge exists, 0.0 otherwise
         size_t   EdgeSize    () const;
@@ -37,8 +39,9 @@ namespace fsu {
         
     protected:
         
-        fsu::Vector <SetType> al_; //map containing the vertices and weight
-		//fsu::Vector <SetType> weight_; //for mapping edges to weight.
+        fsu::Vector <SetType2> al_; //map containing the vertices 
+		
+		fsu::Vector <SetType> weight_; //for mapping edges to weight.
         
     }; //end class ALUWGraph
     
@@ -68,7 +71,9 @@ namespace fsu {
     {
         al_[from].Insert(to); //adds "to" vertex to the corresponding list
         al_[to].Insert(from);
-		al_ = {(from, to)->wt};
+		//al_ = {(from, to)->wt};
+		fsu::String key = ToHex(from) + "." + ToHex(to);
+		weight_.Put(key, wt);
     }
 	
     template < typename N >
@@ -77,7 +82,8 @@ namespace fsu {
         AdjIterator i = al_[from].Includes(to);
         if (i == al_[from].End())
             return 0; //not found
-		al_ = {(from, to)->wt};
+		fsu::String key = ToHex(from) + "." + ToHex(to);
+		weight_.Put(key, wt);
         return 1; //found
     }
 	
@@ -91,20 +97,21 @@ namespace fsu {
 	return esize/2;
 	}
 	
-	template < typename N >
+	/*template < typename N >
 	Edge<N> ALUWGraph<N>::GetEdge(Vertex from, Vertex to) const
 	{
 		return [0, 0, 0.0]; //if doesn't exist.
 		
-	}
+	}*/
 	
 	template < typename N >
     void ALUWGraph<N>::SetWeight(Vertex from, Vertex to, double wt)
     {
-       al_= {(from, to) -> wt};
+       fsu::String key = ToHex(from) + "." + ToHex(to);
+	   weight_.Put(key, wt);
     }
 	
-	/*template < typename N >
+	template < typename N >
     void ALUWGraph<N>::OutDegree(Vertex v)
     {
       return al_[v].Size(); //return size of list corresponding to vertex
@@ -114,9 +121,9 @@ namespace fsu {
     void ALUWGraph<N>::InDegree(Vertex v)
     {
       return al_[v].Size(); //return size of list corresponding to vertex
-    }*/
+    }
 	
-	    template < typename N >
+	template < typename N >
     typename ALUWGraph<N>::AdjIterator ALUWGraph<N>::Begin (Vertex x) const
     {
         return al_[x].Begin(); //returns Begin list iterator
@@ -136,9 +143,48 @@ namespace fsu {
     ALUWGraph<N>::ALUWGraph(N n)
     {
         al_.SetSize(n); 
+		weight_.SetSize(n); 
     }
 	
+	template < typename N >
+    void ALDWGraph<N>::AddEdge(Vertex from, Vertex to, double weight)
+    {
+      (this->al_)[from].Insert(to);
+	   fsu::String key = ToHex(from) + "." + ToHex(to);
+	   weight_.Put(key, wt);
+    }
 	
+	template < typename N >
+    void ALDWGraph<N>::EdgeSize()
+    {
+        size_t esize = 0;
+        for (Vertex v = 0; v < (this->al_).Size(); ++v)
+            esize += ALUWGraph<N>::al_[v].Size();
+        return esize;
+    }
+	
+	template < typename N >
+    void ALDWGraph<N>::InDegree(Vertex v) const
+    {
+      size_t indegree = 0;
+        AdjIterator j;
+        for (Vertex x = 0; x < this->VrtxSize(); ++x)
+        {
+            for (j = this->Begin(x); j != this->End(x); ++j)
+            {
+                if (v == *j) ++indegree;
+            }
+        }
+        return indegree;
+    }
+	
+	  template < typename N >
+    ALDGraph<N>::ALDGraph () : ALUGraph<N>() //default constructor
+    {}
+    
+    template < typename N >
+    ALDGraph<N>::ALDGraph(N n) : ALUGraph<N> (n)
+    {}
 	
 
 #endif
