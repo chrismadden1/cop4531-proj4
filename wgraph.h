@@ -1,3 +1,10 @@
+/*
+    wgraph.h
+    7/08/2019
+    Chris Madden
+    implements weighted graph class using unweighted graphs
+*/
+
 #ifndef WGRAPH_H
 #define WGRAPH_H
 
