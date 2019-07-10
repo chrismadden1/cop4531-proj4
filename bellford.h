@@ -1,3 +1,10 @@
+/*
+    bellford.h
+    7/08/2019
+    Chris Madden
+    implements bellford algorithm on weighted graphs
+*/
+
 #ifndef BELLFORD_H
 #define BELLFORD_H
 
