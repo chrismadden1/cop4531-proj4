@@ -1,3 +1,10 @@
+/*
+    prim.h
+    7/08/2019
+    Chris Madden
+    implements prim algorithm on weighted graphs
+*/
+
 #ifndef PRIM_H
 #define PRIM_H
 
