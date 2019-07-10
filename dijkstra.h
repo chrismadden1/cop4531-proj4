@@ -1,3 +1,10 @@
+/*
+    dijsktra.h
+    7/08/2019
+    Chris Madden
+    implements dijkstra algorithm on weighted graphs
+*/
+
 #ifndef DIJKSTRA_H
 #define DIJKSTRA_H
 
