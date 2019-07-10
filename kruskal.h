@@ -30,10 +30,8 @@ public:
   // extracting information
   const fsu::List<Edge>& MST() const;
   double                 Weight() const;
-  ... // expand API optional
 private:
   const Graph& g_;
-  ...
   PQ           pq_;
 };
 
