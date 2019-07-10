@@ -1,3 +1,10 @@
+/*
+    wgraph_util.h
+    7/08/2019
+    Chris Madden
+    for loading/saving weighted graph types
+*/
+
 #ifndef _WGRAPH_UTIL_H
 #define _WGRAPH_UTIL_H
 
