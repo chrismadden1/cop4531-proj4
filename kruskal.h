@@ -1,3 +1,10 @@
+/*
+    kruskal.h
+    7/08/2019
+    Chris Madden
+    implements kruskal algorithm on weighted graphs
+*/
+
 #ifndef KRUSKAL_H
 #define KRUSKAL_H
 
