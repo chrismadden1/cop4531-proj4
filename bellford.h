@@ -36,4 +36,28 @@ private: // methods
   void Relax(Vertex v)
 };
 
+template <class G>
+void Bellford<G>::Init(vertex source)
+{
+ /*
+ Initialize-single-source(G,s)
+ */
+    
+}
+template <class G>
+void Bellford<G>::Exec(vertex source)
+{
+  /*  repeat (|V| - 1) times
+{
+for each edge (x,y)
+{
+Relax(x,y,d);
+}
+}
+for each edge (x,y)
+if (d[y] > d[x] + w(x,y))
+return false;
+return true
+  */ 
+}
 #endif /* BELLFORD_H */
