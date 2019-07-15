@@ -34,4 +34,33 @@ private: // methods
   void Relax(Vertex v)
 };
 
+template < class G>
+void Dijkstra<G>::Init(vertex source)
+{
+ /*
+ Initialize-single-source (G,s);
+Initialize finished to false
+Initialize Q = V with priority d
+ */
+    
+}
+
+template < class G>
+void Dijkstra<G>::Exec(vertex source)
+{
+ /*
+ while (!Q.Empty())
+{
+x = Q.Front();
+Q.Pop();
+if (finished[x]) continue;
+for each vertex y adjacent from x
+{
+Relax2(x,y,w,Q);
+}
+finished[x] = true;
+}
+ */
+    
+}
 #endif /* DIJKSTRA_H */
