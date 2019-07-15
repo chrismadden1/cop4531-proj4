@@ -34,8 +34,36 @@ private:
   const Graph& g_;
   PQ           pq_;
 };
-
-
-
-
+template <class G >
+void Prim<G>::Init(verbose)
+{
+    /* 
+    init W = {S}
+    init T = empty
+    */
+}
+template <class G >
+void Prim<G>::Exec(verbose)
+{
+ /* for each neighbor n of s,
+q.Push((s,n)); // ARQ1
+while (!q.Empty())
+{
+// loop invariant 1: (W,T) contains no cycles
+// loop invariant 2: (W,T) is connected
+(x,y) = q.Front(); // ARQ2
+q.Pop(); // ARQ3
+if (y is not in W)
+{
+W = W union {y};
+T = T union {[x,y]};
+for each neighbor z of y,
+if (z is not in W)
+q.Push((y,z)); // ARQ4
+}
+}
+output (W,T)
+}*/
+    
+}
 #endif /* PRIM_H */
