@@ -32,6 +32,7 @@ namespace fsu
     typedef double                                 DataType;
     typedef hashclass::KISS < KeyType >            HashType;
     typedef fsu::Entry < KeyType, DataType >       EntryType;
+    typedef fsu::List<EntryType>             BucketType;
     typedef fsu::HashTable<KeyType, DataType, HashType > SetType;
     typedef typename SetType::ConstIterator        AdjIterator;
 
@@ -56,7 +57,8 @@ namespace fsu
     explicit ALUWGraph   (N n);
 
   protected:
-    SetType al_;
+    SetType weight_;
+    Vector < BucketType >  al_;
   };
 
   template < typename N >
@@ -82,8 +84,8 @@ namespace fsu
     ALDWGraph ( );
     explicit ALDWGraph ( N n );
   protected:
-    SetType al_;
-  //  Vector < SetType >  al_;
+    SetType weight_;
+    Vector < BucketType >  al_;
     // new method - creates d as the reverse directed graph of *this
   };
 
@@ -100,33 +102,34 @@ namespace fsu
   template < typename N >
   void ALUWGraph<N>::SetVrtxSize (N n)
   {
-    al_.Rehash((size_t)n);
+    weight_.Rehash((size_t)n);
   }
 
   template < typename N >
   void ALUWGraph<N>::AddEdge (Vertex from, Vertex to, double wt)
   {
     if (from == to) return;
-  //  al_.Insert(to);
-  //  al_[(size_t)to].Insert(from);
+    al_[(size_t)from].Insert(to);
+    al_[(size_t)to].Insert(from);
     fsu::String key = ToHex(from) + "." + ToHex(to);
-	  al_.Insert(key, wt);
+	  weight_.Insert(key, wt);
   }
 
   template < typename N >
   bool ALUWGraph<N>::HasEdge (Vertex from, Vertex to) const
   {
     fsu::String key = ToHex(from) + "." + ToHex(to);
-    AdjIterator i = al_.Includes(key);
+    AdjIterator i = al_[from].Includes(to);
     if (i == End(from))
       return 0;
+    weight_.Insert(key, wt);
     return 1;
   }
 
   template < typename N >
   size_t ALUWGraph<N>::VrtxSize () const
   {
-    return al_.Size();
+    return weight_.Size();
   }
 
   template < typename N >
@@ -135,7 +138,7 @@ namespace fsu
   {
     size_t esize = 0;
     for (Vertex v = 0; v < al_.Size(); ++v)
-      esize += al_.Size();
+      esize += al_[v].Size();
     return esize >> 1; // divide by 2
   }
 
@@ -154,14 +157,14 @@ namespace fsu
   template < typename N >
   typename ALUWGraph<N>::AdjIterator ALUWGraph<N>::Begin (Vertex v) const
   {
-    AdjIterator i = al_.Begin();
+    AdjIterator i = al_[v].Begin();
     return i;
   }
 
   template < typename N >
   typename ALUWGraph<N>::AdjIterator ALUWGraph<N>::End (Vertex v) const
   {
-    AdjIterator i = al_.Begin();
+    AdjIterator i = al_[v].Begin();
     return i;
   }
 
@@ -212,15 +215,16 @@ namespace fsu
   template < typename N >
   void ALDWGraph<N>::SetVrtxSize (N n)
   {
-    al_.Rehash((size_t)n);
+    weight_.Rehash((size_t)n);
   }
   template < typename N >
   void ALDWGraph<N>::AddEdge (Vertex from, Vertex to, double wt)
   {
     if (from == to) return;
-  //  ALUWGraph<N>::al_[(size_t)from].Insert(to);
+    al_[(size_t)from].Insert(to);
+    al_[(size_t)to].Insert(from);
     fsu::String key = ToHex(from) + "." + ToHex(to);
-	  al_.Insert(key, wt);
+	  weight_.Insert(key, wt);
   }
 
   template < typename N >
