@@ -111,14 +111,14 @@ namespace fsu
     if (from == to) return;
     al_[(size_t)from].Insert(to);
     al_[(size_t)to].Insert(from);
-    fsu::String key = ToHex(from) + "." + ToHex(to);
+    fsu::String key = fsu::ToHex(from) + "." + fsu::ToHex(to);
 	  weight_.Insert(key, wt);
   }
 
   template < typename N >
   bool ALUWGraph<N>::HasEdge (Vertex from, Vertex to) const
   {
-    fsu::String key = ToHex(from) + "." + ToHex(to);
+   fsu::String key = fsu::ToHex(from) + "." + fsu::ToHex(to);
     AdjIterator i = al_[from].Includes(to);
     if (i == End(from))
       return 0;
@@ -223,7 +223,7 @@ namespace fsu
     if (from == to) return;
     al_[(size_t)from].Insert(to);
     al_[(size_t)to].Insert(from);
-    fsu::String key = ToHex(from) + "." + ToHex(to);
+    fsu::String key = fsu::ToHex(from) + "." + fsu::ToHex(to);
 	  weight_.Insert(key, wt);
   }
 
