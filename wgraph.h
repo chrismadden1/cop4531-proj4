@@ -18,7 +18,8 @@
  #include "graph.h"
  #include "aa.h"
  #include "hashclasses.h"
- #include <xstring.cpp>
+ #include "hashclasses.cpp"
+ #include "xstring.cpp"
 
 namespace fsu
 {
