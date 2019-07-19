@@ -13,10 +13,10 @@ class Kruskal
 {
   typedef G                      Graph
   typedef typename G::Vertex     Vertex;
-  typedef fsu::Edge<Vertex>      Edge;
-  typedef fsu::Vector<Edge>      Container;
+  //typedef fsu::Edge<Vertex>      Edge;
+ // typedef fsu::Vector<Edge>      Container;
   typedef fsu::GreaterThan<Edge> Predicate;
-  typedef fsu::PriorityQueue<Edge,Container,Predicate> PQ;
+ // typedef fsu::PriorityQueue<Edge,Container,Predicate> PQ;
 
 
 public:
@@ -40,7 +40,7 @@ private:
 template < class G>
 void Kruskal<G>::Init(bool verbose)
 {
-    //init queue in sorted order by increasing weight
+    /*init queue in sorted order by increasing weight
     //init partition p(|v|)
     //init f as empty
       if (verbose)
@@ -52,7 +52,7 @@ void Kruskal<G>::Init(bool verbose)
       pq_.Dump(std::cout, '\n');
       std::cout << '\n';
     }   
-      }
+      }*/
 }
 
 template < class G>
