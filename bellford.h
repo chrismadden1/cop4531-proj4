@@ -24,9 +24,9 @@ public:
   void Exec();              // executes algorithm
 
   // extracting information
-  const fsu::Vector<double>& Distance() const;
-  const fsu::Vector<size_t>& Parent() const;
-  void                       Path(Vertex x, fsu::List<Vertex>& path) const;
+ // const fsu::Vector<double>& Distance() const;
+ // const fsu::Vector<size_t>& Parent() const;
+//  void                       Path(Vertex x, fsu::List<Vertex>& path) const;
   // expand API optional
 
 private: // data
