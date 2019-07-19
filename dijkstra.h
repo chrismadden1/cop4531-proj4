@@ -15,8 +15,8 @@ class Dijkstra
   typedef typename G::Vertex                         Vertex;
   typedef fsu::Pair<double,Vertex>                   DV;
   typedef fsu::Vector<DV>                            Container;
-  typedef fsu::GreaterThan<DV>                       Predicate;
-  typedef fsu::PriorityQueue<DV,Container,Predicate> PQ;
+ // typedef fsu::GreaterThan<DV>                       Predicate;
+ // typedef fsu::PriorityQueue<DV,Container,Predicate> PQ;
 public:
   // constructor initializes all class variables in init list
   Dijkstra (const G& g) : g_(g),start_(0),c_(0),pred_(),pq_(c_,pred_),d_(0), p_(0), hasNegativeWeight_(0) {}
@@ -57,14 +57,14 @@ void Dijkstra<G>::Init(Vertex source)
 template < class G>
 void Dijkstra<G>::Exec(Vertex source)
 {
- pq_.Push(source);
+ /*pq_.Push(source);
  while (!pq_.Empty())
 {
 Vertex u = pq_.Front();
 pq_.Pop();
 //for(each vertex y adjacent to x)
         Relax3(x,y,w,pq_);
-}
+}*/
  
     
 }
