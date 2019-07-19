@@ -11,11 +11,11 @@
 template < class G>
 class Kruskal 
 {
-  typedef G                      Graph
+  typedef G                      Graph;
   typedef typename G::Vertex     Vertex;
   //typedef fsu::Edge<Vertex>      Edge;
  // typedef fsu::Vector<Edge>      Container;
-  typedef fsu::GreaterThan<Edge> Predicate;
+  //typedef fsu::GreaterThan<Edge> Predicate;
  // typedef fsu::PriorityQueue<Edge,Container,Predicate> PQ;
 
 
@@ -28,7 +28,7 @@ public:
   void Exec(bool verbose = 0); // runs algorithm
 
   // extracting information
-  const fsu::List<Edge>& MST() const;
+ // const fsu::List<Edge>& MST() const;
   double                 Weight() const;
 private:
   const Graph& g_;
