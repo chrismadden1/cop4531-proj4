@@ -11,12 +11,12 @@
 template < class G>
 class Prim 
 {
-  typedef G                      Graph
+  typedef G                      Graph;
   typedef typename G::Vertex     Vertex;
-  typedef fsu::Edge<Vertex>      Edge;
-  typedef fsu::Vector<Edge>      Container;
-  typedef fsu::GreaterThan<Edge> Predicate;
-  typedef fsu::PriorityQueue<Edge,Container,Predicate> PQ;
+ // typedef fsu::Edge<Vertex>      Edge;
+ // typedef fsu::Vector<Edge>      Container;
+ // typedef fsu::GreaterThan<Edge> Predicate;
+ // typedef fsu::PriorityQueue<Edge,Container,Predicate> PQ;
 
 
 public:
@@ -28,11 +28,11 @@ public:
   void Exec(bool verbose = 0); // runs algorithm
 
   // extracting information
-  const fsu::List<Edge>& MST() const;
+//  const fsu::List<Edge>& MST() const;
   double                 Weight() const;
 private:
   const Graph& g_;
-  PQ           pq_;
+ //PQ           pq_;
 };
 template <class G >
 void Prim<G>::Init(verbose)
