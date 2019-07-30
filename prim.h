@@ -8,62 +8,31 @@
 #ifndef PRIM_H
 #define PRIM_H
 
-template < class G>
-class Prim 
+template <class G>
+class Prim
 {
   typedef G                      Graph;
   typedef typename G::Vertex     Vertex;
- // typedef fsu::Edge<Vertex>      Edge;
- // typedef fsu::Vector<Edge>      Container;
- // typedef fsu::GreaterThan<Edge> Predicate;
- // typedef fsu::PriorityQueue<Edge,Container,Predicate> PQ;
-
+  typedef fsu::Edge<Vertex>      Edge;
+  typedef fsu::Vector<Edge>      Container;
+  typedef fsu::GreaterThan<Edge> Predicate;
+  typedef fsu::PriorityQueue<Edge,Container,Predicate> PQ;
 
 public:
-  // constructor initializes all class variables in init list
-  Prim (const G& g);
+  void                   Init   ( bool verbose = 0 );
+  void                   Exec   ( bool verbose = 0 );
+  const fsu::List<Edge>& MST    () const { return mst_; }
+  double                 Weight () const { return mstw_; }
+  Prim                          (const G& g) : g_(g),mst_(), mstw_(0.0), c_(0), pred_(), pq_(c_,pred_), inTree_(0) {}
 
-  // implementing the algorithm
-  void Init(bool verbose = 0); // preps class variables for execution of algorithm
-  void Exec(bool verbose = 0); // runs algorithm
-
-  // extracting information
-//  const fsu::List<Edge>& MST() const;
-  double                 Weight() const;
 private:
-  const Graph& g_;
- //PQ           pq_;
+  const G&        g_;    // undirected weighted graph
+  fsu::List<Edge> mst_;  // "output" edge set
+  double          mstw_; // weight of MST
+  Container       c_;    // "dynamic" edge set - discovered but not yet used
+  Predicate       pred_; // edge prioritizer
+  PQ              pq_;   // priority queue package operating on c_ with pred_
+  fsu::Vector<bool> inTree_; // tree vertices
 };
-template <class G >
-void Prim<G>::Init(verbose)
-{
-    /* 
-    init W = {S}
-    init T = empty
-    */
-}
-template <class G >
-void Prim<G>::Exec(verbose)
-{
- /* for each neighbor n of s,
-q.Push((s,n)); // ARQ1
-while (!q.Empty())
-{
-// loop invariant 1: (W,T) contains no cycles
-// loop invariant 2: (W,T) is connected
-(x,y) = q.Front(); // ARQ2
-q.Pop(); // ARQ3
-if (y is not in W)
-{
-W = W union {y};
-T = T union {[x,y]};
-for each neighbor z of y,
-if (z is not in W)
-q.Push((y,z)); // ARQ4
-}
-}
-output (W,T)
-}*/
-    
-}
+
 #endif /* PRIM_H */
