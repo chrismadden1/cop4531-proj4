@@ -34,6 +34,21 @@ private:
   PQ              pq_;   // priority queue package operating on c_ with pred_
 };
 
+template <class G>
+void Prim<G>::Init()
+{
+    pq_.Init();
+    mst_.Clear();
+    c_.Clear();
+    mstw_ = 0.0;
+    inTree_[0] = true;
+    fsu::Partition <size_t> p (g_.VrtxSize());      
+}
 
+template <class G>
+void Prim<G>::Exec()
+{
+    
+}
 
 #endif /* KRUSKAL_H */
