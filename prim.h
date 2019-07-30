@@ -39,10 +39,7 @@ private:
 template <class G>
 void Prim<G>::Init()
 {
-    mst_.Clear();
-    c_.Clear();
-    mstw_ = 0.0;
-    inTree_[0] = true;
+    
 }
 
 template <class G>
