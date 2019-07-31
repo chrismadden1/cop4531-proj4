@@ -10,15 +10,21 @@
 
 #include <iostream>
 #include <vector.h>
-// #include <ovector.h>
+#include <vector_nonstd.h>
+ #include <ovector.h>
 #include <list.h>
-// #include <olist.h>
-// #include <rbllt_adt.h>
-// #include <matrix.h>
+ #include <olist.h>
+ //#include <rbllt_adt.h>
+ #include "primes.h"
  #include "graph.h"
  #include "aa.h"
+ #include "tostring.h"
  #include "hashclasses.h"
- #include "hashclasses.cpp"
+ #include "hashfunctions.h"
+ #include "hashfunctions.cpp"
+ #include "bitvect.h"
+ #include "bitvect.cpp"
+ #include "primes.cpp"
  #include "xstring.cpp"
 
 namespace fsu
@@ -33,9 +39,9 @@ namespace fsu
     typedef double                                 DataType;
     typedef hashclass::KISS < KeyType >            HashType;
     typedef fsu::Entry < KeyType, DataType >       EntryType;
-    typedef fsu::List<EntryType>             BucketType;
+    typedef fsu::List<EntryType>                   BucketType;
     typedef fsu::HashTable<KeyType, DataType, HashType > SetType;
-    typedef typename SetType::ConstIterator        AdjIterator;
+    typedef typename BucketType::ConstIterator        AdjIterator;
 
     void   SetVrtxSize  (N n);
     size_t VrtxSize     () const;
@@ -43,7 +49,6 @@ namespace fsu
     bool   HasEdge      (Vertex from, Vertex to) const;
     size_t EdgeSize     () const;           // Theta (|V| + |E|)
     size_t OutDegree    (Vertex v) const;
-    Edge<N> GetEdge     (Vertex from, Vertex to);//returns [0,0, 0.0] if does not exist.
     size_t InDegree     (Vertex v) const;
     void   SetWeight  (Vertex from, Vertex to, double weight);
     void   GetWeight  (Vertex from, Vertex to);
@@ -60,8 +65,7 @@ namespace fsu
 
   protected:
     SetType weight_;
-    fsu::String    Key (N x, N y); //key calc
-   // Vector < BucketType >  al_;
+   fsu::String    Key (N x, N y); //key calc
   };
 
   template < typename N >
@@ -74,23 +78,24 @@ namespace fsu
     typedef hashclass::KISS < KeyType >            HashType;
     typedef fsu::Entry < KeyType, DataType >       EntryType;
     typedef fsu::HashTable<KeyType, DataType, HashType > SetType;
+      typedef fsu::List<EntryType>                   BucketType;
     typedef typename ALUGraph<N>::AdjIterator          AdjIterator;
 
      void   SetVrtxSize  (N n);
-     void   Check(std::ostream& os) const;
-     Edge<N> GetEdge     (Vertex from, Vertex to);//returns [0,0, 0.0] if does not exist.
     // size_t VrtxSize     () const;
     void   AddEdge      (Vertex from, Vertex to, double wt = 1.0);
     // bool   HasEdge      (Vertex from, Vertex to) const;
     size_t EdgeSize     () const;          // Theta (|V| + |E|)
     // size_t OutDegree    (Vertex v) const;
     size_t InDegree     (Vertex v) const;  // Theta (|V| + |E|)
+    void   Check(std::ostream& os) const;
 
     ALDWGraph ( );
     explicit ALDWGraph ( N n );
   protected:
-   SetType weight_;
-    fsu::String    Key (N x, N y); //key calc
+    SetType weight_;
+   fsu::String    Key (N x, N y); //key calc
+    // new method - creates d as the reverse directed graph of *this
   };
 
   /////////////////////////
@@ -99,8 +104,7 @@ namespace fsu
 
   template < typename N >
   ALUWGraph<N>::ALUWGraph ()
-  {
-  }
+  {}
 
   template < typename N >
   ALUWGraph<N>::ALUWGraph ( N n ) :weight_((size_t)n, 1){}
@@ -110,38 +114,37 @@ namespace fsu
   {
     weight_.Rehash((size_t)n);
   }
+
   template < typename N >
-  void   ALUWGraph<N>::Check(std::ostream& os) const
-  {
-	  weight_.Analysis(os);	  
-  }
+   void   ALUWGraph<N>::Check(std::ostream& os) const
+   {
+ 	  weight_.Analysis(os);
+   }
   template < typename N >
   void ALUWGraph<N>::AddEdge (Vertex from, Vertex to, double wt)
   {
-    if (from == to) return;
+    fsu::String key;
+    double weight = wt;
+    if (from == to)
+      return;
     if(from < to)
-	  fsu::String key = fsu::ToHex(from) + "." + fsu::ToHex(to);
+	   key = fsu::ToHex(from) + "." + fsu::ToHex(to);
     else
-    	fsu::String key = fsu::ToHex(to) + "." + fsu::ToHex(from);
-    weight_.Put(key, wt);
+      key = fsu::ToHex(to) + "." + fsu::ToHex(from);
+    weight_.Put(key, weight);
   }
-  template < typename N >
-  fsu::String ALUWGraph<N>::Key (N x, N y)
-  {
-    if (x < y) return fsu::ToHex(x)+'.'+fsu::ToHex(y);
-    else       return fsu::ToHex(y)+'.'+fsu::ToHex(x);
-  }
+
   template < typename N >
   bool ALUWGraph<N>::HasEdge (Vertex from, Vertex to) const
   {
-   fsu::String key2 = fsu::ToHex(to) + "." + fsu::ToHex(from);
-   fsu::String key = fsu::ToHex(from) + "." + fsu::ToHex(to);
-    AdjIterator i = weight_.Includes(key);
-    AdjIterator j = weight_.Includes(key2);
-    if (i == End(key1) || j ==End(key2))
-      return 0;
-    weight_.Put(key, wt);
-    return 1;
+    fsu::String key2 = fsu::ToHex(to) + "." + fsu::ToHex(from);
+    fsu::String key = fsu::ToHex(from) + "." + fsu::ToHex(to);
+   AdjIterator i = weight_.Includes(key);
+   AdjIterator j = weight_.Includes(key2);
+   if (i == End(key) || j ==End(key2))
+     return false;
+  // weight_.Put(key, *i);
+   return true;
   }
 
   template < typename N >
@@ -155,9 +158,9 @@ namespace fsu
   // Theta (|V| + |E|)
   {
     size_t esize = 0;
-   // for (Vertex v = 0; v <  weight_.Size(); ++v)
-      esize +=  weight_.Size();
-    return esize >> 1; // divide by 2
+    // for (Vertex v = 0; v <  weight_.Size(); ++v)
+       esize +=  weight_.Size();
+     return esize >> 1; // divide by 2
   }
 
   template < typename N >
@@ -171,23 +174,18 @@ namespace fsu
   {
     return OutDegree(v);
   }
-  template < typename N >
-  Edge<N>ALUWGraph<N>::GetEdge(Vertex from, Vertex to)
-  
-	  Edge x(0,0, 0.0);
-	  return x;
-  }
+
   template < typename N >
   typename ALUWGraph<N>::AdjIterator ALUWGraph<N>::Begin (Vertex v) const
   {
-    AdjIterator i = weight_.Begin();
+    AdjIterator i;
     return i;
   }
 
   template < typename N >
   typename ALUWGraph<N>::AdjIterator ALUWGraph<N>::End (Vertex v) const
   {
-    AdjIterator i = weight_.End();
+   AdjIterator i;
     return i;
   }
 
@@ -202,18 +200,18 @@ namespace fsu
       i = this->Begin(v);
       if (i != this->End(v))
       {
-	os << *i;
-	++i;
+        os << *i;
+        ++i;
       }
       for ( ; i != this->End(v); ++i)
       {
-	os << ',' << *i;
+        os << ',' << *i;
       }
       os << '\n';
     }
   }
 
- /* template < typename N >
+/*  template < typename N >
   void ALUWGraph<N>::Shuffle()
   {
     for (Vertex v = 0; v < VrtxSize(); ++v) al_[v].Shuffle();
@@ -231,10 +229,11 @@ namespace fsu
 
   template < typename N >
   ALDWGraph<N>::ALDWGraph ()
-  {
-  }
+  {}
+
   template < typename N >
   ALDWGraph<N>::ALDWGraph ( N n ) : weight_((size_t)n, 1){}
+
 
   template < typename N >
   void ALDWGraph<N>::SetVrtxSize (N n)
@@ -248,33 +247,17 @@ namespace fsu
     fsu::String key = fsu::ToHex(from) + "." + fsu::ToHex(to);
     weight_.Put(key, wt);
   }
- /*template < typename N >
-  fsu::String ALUWGraph::Key (N x, N y)
-  {    
-    return fsu::ToHex(x)+'.'+fsu::ToHex(y);
-  }*/
-	
+
   template < typename N >
   size_t ALDWGraph<N>::EdgeSize () const
   // Theta (|V| + |E|)
   {
     size_t esize = 0;
-   // for (Vertex v = 0; v < ALUGraph<N>::al_.Size(); ++v)
-      esize += ALUGraph<N>::weight_.Size();
-    return esize;
+       // for (Vertex v = 0; v < ALUGraph<N>::al_.Size(); ++v)
+          esize += weight_.Size();
+        return esize;
   }
 
-  template < typename N >
-  Edge<N>ALDWGraph<N>::GetEdge(Vertex from, Vertex to)
-  
-	  Edge x(0,0, 0.0);
-	  return x;
-  }
-    template < typename N >
-  void   ALDWGraph<N>::Check(std::ostream& os) const
-  {
-	  weight_.Analysis(os);	  
-  }
   template < typename N >
   size_t ALDWGraph<N>::InDegree (Vertex v) const
   // Theta (|V| + |E|)
@@ -285,12 +268,16 @@ namespace fsu
     {
       for (i = this->Begin(x); i != this->End(x); ++i)
       {
-	if (v == *i) ++indegree;
+        if (v == *i) ++indegree;
       }
     }
     return indegree;
   }
-
+  template < typename N >
+void   ALDWGraph<N>::Check(std::ostream& os) const
+{
+  weight_.Analysis(os);
+}
 /*  template < typename N >
   void ALDWGraph<N>::Reverse(ALDGraph& d) const
   {
