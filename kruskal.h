@@ -48,7 +48,14 @@ void Prim<G>::Init()
 template <class G>
 void Prim<G>::Exec()
 {
-    
+    while(!pq_.Empty())
+    {
+        mst_.PushBack(pq_.Front());
+        pq_.Pop();
+        if(!p.Find())
+            
+        
+    }
 }
 
 #endif /* KRUSKAL_H */
