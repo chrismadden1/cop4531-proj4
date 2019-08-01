@@ -132,6 +132,8 @@ namespace fsu
     else
       key = fsu::ToHex(to) + "." + fsu::ToHex(from);
     weight_.Put(key, weight);
+    if(weight_.Size() <= 2* numBuckets_)
+	    weight_.Rehash(weight_.Size() * 2);
   }
 
   template < typename N >
@@ -158,7 +160,7 @@ namespace fsu
   // Theta (|V| + |E|)
   {
     size_t esize = 0;
-    // for (Vertex v = 0; v <  weight_.Size(); ++v)
+     for (Vertex v = 0; v <  numBuckets_; ++v)
        esize +=  weight_.Size();
      return esize >> 1; // divide by 2
   }
